@@ -1,126 +1,130 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Star, Quote, User } from "lucide-react";
-import { useEffect } from "react";
+import { Star, ExternalLink, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
+import { useCallback, useEffect, useState } from "react";
+import { Button } from "./ui/button";
+
+const reviews = [
+  {
+    id: 1,
+    name: "Susan Hutchens",
+    rating: 5,
+    text: "We are so happy with the results! Not only for their mastery as painters, but for their robust level of integrity and professionalism. We would recommend Super Hero’s to anyone and invite you to experience the beauty of color!",
+    image: "https://lh3.googleusercontent.com/a-/ALV-UjVUhk8nYL9rEuV9nZbHvFcMDuUZar5ZNrR0wVg9xCbInz4_Mugt=w108-h108-p-rp-mo-br100"
+  },
+  {
+    id: 2,
+    name: "Angela Blanchard",
+    rating: 5,
+    text: "Our entryway looks brand new thanks to the team! They were prompt, kept the job site clean, finished on time and were competitively priced. Very happy with the service and we will definitely hire them again!",
+    image: null
+  },
+  {
+    id: 3,
+    name: "William Jordan",
+    rating: 5,
+    text: "Had a great experience with Superheroes painting. Great customer service and a reliable team with outstanding work ethic. I will be referring them to anyone needing interior or exterior painting done.",
+    image: null
+  },
+  {
+    id: 4,
+    name: "Britt Ruhl",
+    rating: 5,
+    text: "They are a Very professional company that does great work. Nemesio was on time and worked hard to get a time sensitive bid done late Friday and started work Monday. They finished when they said they would and cleaned up their mess when the job was completed. I highly recommend.",
+    image: "https://lh3.googleusercontent.com/a-/ALV-UjXUbXOe9XkJ7Z4P2FfIGQhsrRhxffdXo-qb47Rkg_SmiHWLgGa-=w108-h108-p-rp-mo-br100"
+  }
+];
 
 const Reviews = () => {
-  const reviews = [
-    {
-      name: "Brian",
-      rating: 5,
-      text: "Absolutely impressed with the detail and professionalism! My car looks brand new—inside and out every time I book with High Performance Details. Adrian took his time, paid attention to every little spot, and the results speak for themselves. Highly recommend to anyone looking for top-tier service!",
-    },
-    {
-      name: "Marisbel Dominguez", 
-      rating: 5,
-      text: "High Performance Details did an amazing job on my car! The attention to detail was next level—my car looks brand new inside and out. You can tell he really cares about the quality of his work. The shine, the cleanliness, everything was flawless. Definitely coming back and recommending him to everyone I know. Top-tier service all around!"
-    },
-    {
-      name: "Vinnie Mayans III",
-      rating: 5,
-      text: "Absolutely the best in the business! Professional and precise when it comes to details. My Corvette convertible 'BLU RAY' had an intense detail job done and it came out better than new condition. I now have him detail both my Corvette 'BLU RAY' and my 'Beautiful Blue Convertible Foxbody Mustang' on a bi-weekly basis. Strongly recommend Adrian @ High Performance Details."
-    }
-  ];
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start', slidesToScroll: 1 }, [Autoplay({ delay: 5000, stopOnInteraction: false })]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const scrollToContact = () => {
-    const element = document.querySelector("#contact");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
-  // Reveal-on-scroll animation for review cards
   useEffect(() => {
-    const container = document.querySelector('#reviews');
-    if (!container) return;
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    return () => {
+      if (emblaApi) emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
-    const elements = container.querySelectorAll('.reveal-on-scroll');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement;
-            el.classList.add('animate-fade-in', 'opacity-100', 'translate-y-0');
-            el.classList.remove('opacity-0', 'translate-y-6');
-            observer.unobserve(el);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
   return (
-    <section id="reviews" className="py-20 bg-white">
+    <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold font-playfair text-black mb-4">
-            What Our <span className="text-primary">Clients Say</span>
+        <div className="text-center mb-16">
+          <span className="text-primary font-bold tracking-widest text-sm uppercase block mb-4 font-onest">
+            Testimonials
+          </span>
+          <h2 className="text-3xl md:text-5xl font-normal font-onest text-black mb-4">
+            What Our Clients Say
           </h2>
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="flex space-x-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-6 w-6 text-primary fill-current" />
-              ))}
-            </div>
-            <span className="text-gray-600">• 25+ Google Reviews</span>
-          </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-inter">
-            See why Miami trusts High Performance Detail for exceptional automotive care
-          </p>
+          <p className="text-lg text-gray-600 mb-8">Trusted by 100+ Homeowners & Businesses</p>
         </div>
 
-        {/* Reviews Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {reviews.map((review, index) => (
-            <Card key={index} className="card-automotive hover-lift h-full reveal-on-scroll opacity-0 translate-y-6 will-change-transform">
-              <CardContent className="p-6 h-full flex flex-col">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
-                      <User className="h-5 w-5 text-primary" />
+        <div className="relative max-w-5xl mx-auto">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex -ml-4">
+              {reviews.map((review) => (
+                <div key={review.id} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.33%] pl-4">
+                  <div className="bg-gray-50 p-8 rounded-2xl h-full flex flex-col relative border border-gray-100 hover:shadow-lg transition-shadow">
+                    <Quote className="w-10 h-10 text-primary/20 mb-4" />
+
+                    <div className="flex text-yellow-500 mb-4">
+                      {[...Array(review.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-current" />
+                      ))}
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">{review.name}</h4>
+
+                    <p className="text-gray-600 font-sans mb-6 flex-grow italic">"{review.text}"</p>
+
+                    <div className="flex items-center gap-4 mt-auto">
+                      {review.image ? (
+                        <img src={review.image} alt={review.name} className="w-12 h-12 rounded-full object-cover" />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                          {review.name.charAt(0)}
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="font-bold text-black font-onest">{review.name}</h4>
+                        <span className="text-xs text-gray-500">Google Review</span>
+                      </div>
                     </div>
                   </div>
-                  <img src="https://cdn.trustindex.io/assets/platform/Google/icon.svg" className="h-6 w-6 text-primary/50" />
                 </div>
+              ))}
+            </div>
+          </div>
 
-                {/* Rating */}
-                <div className="flex items-center space-x-1 mb-4">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-primary fill-current" />
-                  ))}
-                </div>
+          <div className="flex justify-center gap-4 mt-8">
+            <Button variant="outline" size="icon" onClick={scrollPrev} className="rounded-full border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-colors">
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+            <Button variant="outline" size="icon" onClick={scrollNext} className="rounded-full border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-colors">
+              <ChevronRight className="w-5 h-5" />
+            </Button>
+          </div>
 
-                {/* Review Text */}
-                <blockquote className="text-muted-foreground leading-relaxed flex-grow">
-                  "{review.text}"
-                </blockquote>
-              </CardContent>
-            </Card>
-          ))}
+          <div className="text-center mt-12">
+            <a
+              href="https://share.google/kOkFWYqLD1NMoUgWy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-primary font-bold hover:underline"
+            >
+              View more reviews <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+
         </div>
-
-        {/* CTA Section */}
-        <div className="text-center">
-          <Button 
-            size="lg" 
-            className="btn-primary text-lg px-8 py-6"
-            onClick={() => window.open('https://www.google.com/search?q=High+Performance+Detail+Miami+reviews', '_blank')}
-          >
-            View More Reviews
-          </Button>
-        </div>
-
-
       </div>
     </section>
   );

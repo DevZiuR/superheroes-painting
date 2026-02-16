@@ -1,79 +1,67 @@
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Star, Shield, Zap, Phone } from "lucide-react";
-import heroBg from "@/assets/gallery-7.jpeg";
+import { ArrowRight, Star } from "lucide-react";
+import { Button } from "./ui/button";
 
 const Hero = () => {
-  const scrollToContact = () => {
-    const element = document.querySelector("#contact");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const scrollToServices = () => {
-    const element = document.querySelector("#services");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+  const handleCall = () => {
+    window.location.href = "tel:9168076156";
   };
 
   return (
-    <section 
-      id="home" 
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: `url('https://i.imgur.com/ZLQqX4e.jpeg')` }}
-    >
-      {/* Darker overlay for better text visibility */}
-      <div className="absolute inset-0 bg-black/80" />
-      
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 text-center">
-        <div className="max-w-4xl mx-auto animate-fade-in">
-          {/* Badge */}
-          <div className="inline-flex items-center space-x-2 bg-black/50 backdrop-blur-sm border border-primary/50 rounded-full px-6 py-3 mb-8">
-            <Star className="h-5 w-5 text-primary" />
-            <span className="text-foreground font-medium font-inter">Full vehicle wraps from <span className="text-primary font-italic">$1,500</span> • Free Quotes</span>
-          </div>
-
-          {/* Main Headline */}
-          <h1 className="text-4xl md:text-6xl font-bold font-playfair text-white mb-6 leading-tight">
-            <span className="text-primary">Kissimmee's </span> Expert Vehicle Wraps, Tints & Decals
-          </h1>
-
-          {/* Subheading */}
-          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed font-inter">
-          <span className="text-primary">Protect your investment</span> and express your unique style with our expert wraps, precise tints, and flawless decals. Serving Kissimmee with pride and <span className="text-primary">unparalleled quality.</span></p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
-              size="lg" 
-              className="btn-primary text-lg px-6 py-6 animate-glow-pulse hover:bg-primary/90"
-              onClick={scrollToContact}
-            >
-              <Phone className="ml-1 h-5 w-5" />
-              Call Now
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="btn-outline text-lg px-6 py-6 text-white/90"
-              onClick={scrollToServices}
-            >
-              View Services
-            </Button>
-          </div>
-
-        </div>
+    <section id="home" className="relative h-screen min-h-[800px] flex items-end pb-20 overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="https://s3-media0.fl.yelpcdn.com/bphoto/9qXFzwksHjGeVftZhC1RDw/o.jpg"
+          alt="Painting Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40" />
       </div>
 
-      {/* Scroll Indicator 
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-pulse"></div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex flex-col lg:flex-row items-end justify-between gap-12 lg:gap-20">
+
+          {/* Left Content: Typography */}
+          <div className="max-w-4xl opacity-0 animate-slide-up" style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-2 h-2 bg-white" />
+              <span className="text-white font-bold tracking-[0.2em] text-sm uppercase font-onest">
+                Exceptional Painting Results, Every Time
+              </span>
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-onest leading-tight text-white uppercase mb-8">
+              Northern California's <br />
+              <span className="text-gray-200">Trusted Painting</span> <br />
+              Experts for <span className="text-gray-200">Home & Business</span>
+            </h1>
+
+            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+              <Button
+                onClick={handleCall}
+                className="bg-[#7908BD] hover:bg-primary/90 text-white px-8 py-6 rounded-none font-medium text-base uppercase tracking-wider transition-all duration-300 transform hover:-translate-y-1 font-onest"
+              >
+                Get a Free Quote
+              </Button>
+            </div>
+          </div>
+
+          {/* Right Content: Stats Box */}
+          <div className="w-full lg:w-auto min-w-[300px] opacity-0 animate-slide-up" style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}>
+            <div className="grid grid-cols-2 divide-x divide-gray-700 bg-black/40 backdrop-blur-md border border-white/10 p-8">
+              <div className="px-6 text-center lg:text-left">
+                <h3 className="text-4xl lg:text-5xl font-semibold font-onest text-white mb-2">10+</h3>
+                <p className="text-gray-300 text-sm font-medium uppercase tracking-wider font-onest">Years of<br />Experience</p>
+              </div>
+              <div className="px-6 text-center lg:text-left">
+                <h3 className="text-4xl lg:text-5xl font-semibold font-onest text-white mb-2">100+</h3>
+                <p className="text-gray-300 text-sm font-medium uppercase tracking-wider font-onest">Completed<br />Projects</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      */}
     </section>
   );
 };

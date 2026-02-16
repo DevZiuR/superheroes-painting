@@ -1,308 +1,221 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { 
-  Phone, 
-  MapPin, 
-  Clock, 
-  Mail, 
-  MessageSquare,
-  Car,
-  Calendar,
-  CheckCircle
-} from "lucide-react";
-import { useEffect } from "react";
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { CheckCircle2, ArrowUpRight, Paintbrush, ShieldCheck, Clock, Users, Building2 } from "lucide-react";
 
 const Contact = () => {
-  const businessHours = [
-    { day: "Tuesday - Friday", hours: "9:30 AM - 6:30 PM" },
-    { day: "Saturday", hours: "8:30 AM - 5:00 PM" },
-    { day: "Sunday & Monday", hours: "Closed" },
-  ];
+  const [formState, setFormState] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    projectType: "",
+    timeline: "",
+    vision: "",
+    source: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const contactMethods = [
-    {
-      icon: Phone,
-      text: "(407) xxx-xxxx",
-      action: "tel:+1407xxx xxxx"
-    },
-    {
-      icon: Mail,
-      text: "info@vinylplugfl.com",
-      action: "mailto:info@vinylplugfl.com"
-    },
-    {
-      icon: MapPin,
-      text: "Kissimmee, FL"
-    }
-  ];
-
-  const serviceTypes = [
-    "Wraps",
-    "Decals",
-    "Chrome Delete",
-    "Tints",
-    "Custom Request"
-  ];
-
-  const handleContactClick = (action: string | null) => {
-    if (action) {
-      window.open(action, '_blank');
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setIsSubmitting(false);
+    setIsSuccess(true);
   };
 
-  // Reveal-on-scroll animation for contact section items
-  useEffect(() => {
-    const container = document.querySelector('#contact');
-    if (!container) return;
+  const handleInputChange = (field: string, value: string) => {
+    setFormState(prev => ({ ...prev, [field]: value }));
+  };
 
-    const elements = container.querySelectorAll('.reveal-on-scroll');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement;
-            el.classList.add('animate-fade-in', 'opacity-100', 'translate-y-0');
-            el.classList.remove('opacity-0', 'translate-y-6');
-            observer.unobserve(el);
-          }
-        });
-      },
-      { threshold: 0.15 }
+  if (isSuccess) {
+    return (
+      <section id="contact" className="py-24 bg-gray-50 flex items-center justify-center min-h-[600px]">
+        <div className="bg-white p-12 rounded-2xl shadow-xl text-center max-w-lg mx-4 animate-fade-in border border-gray-100">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 className="w-10 h-10 text-green-600" />
+          </div>
+          <h3 className="text-3xl font-bold font-onest text-gray-900 mb-4">Request Received!</h3>
+          <p className="text-gray-600 font-sans mb-8">
+            Thank you! We'll contact you within 24 hours with your personalized estimate.
+          </p>
+          <Button
+            onClick={() => setIsSuccess(false)}
+            className="bg-primary text-white px-8 py-3 rounded-full font-bold hover:shadow-lg transition-all"
+          >
+            Send Another Request
+          </Button>
+        </div>
+      </section>
     );
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+  }
 
   return (
-    <section id="contact" className="py-20 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold font-playfair text-black mb-4">
-            Ready to <span className="text-primary">Elevate</span> Your Look?
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-inter">
-            Premium vehicle <span className="font-semibold">wraps, decals, chrome deletes, and tints</span> in Kissimmee, FL.
-            We use high‑quality materials and precise installation for a flawless, long‑lasting finish.
-          </p>
-        </div>
+    <section id="contact" className="py-20 lg:py-28 bg-black overflow-hidden relative">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Form */}
-          <div className="lg:col-span-2 reveal-on-scroll opacity-0 translate-y-6 will-change-transform">
-            <Card className="card-automotive">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center">
-                  <Calendar className="h-6 w-6 text-primary mr-3" />
-                  Request Your Wrap/Tint/Decal Quote
-                </h3>
-                
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Full Name *
-                      </label>
-                      <Input 
-                        placeholder="Your name"
-                        className="bg-muted border-border focus:border-primary"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Phone Number *
-                      </label>
-                      <Input 
-                        placeholder="+1 (407) xxx-xxxx"
-                        className="bg-muted border-border focus:border-primary"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Email Address
-                    </label>
-                    <Input 
-                      type="email"
-                      placeholder="your.email@example.com"
-                      className="bg-muted border-border focus:border-primary"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Service Needed *
-                    </label>
-                    <select className="w-full p-3 bg-muted border border-border rounded-md focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
-                      <option value="">Select a service</option>
-                      {serviceTypes.map((service) => (
-                        <option key={service} value={service}>{service}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Vehicle Make & Model
-                      </label>
-                      <Input 
-                        placeholder="e.g., BMW 3 Series"
-                        className="bg-muted border-border focus:border-primary"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Vehicle Year
-                      </label>
-                      <Input 
-                        placeholder="e.g., 2022"
-                        className="bg-muted border-border focus:border-primary"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Desired Color / Finish (Wrap/Tint)
-                      </label>
-                      <Input 
-                        placeholder="e.g., Satin Black, 35% tint, etc."
-                        className="bg-muted border-border focus:border-primary"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Decal Placement (if applicable)
-                      </label>
-                      <Input 
-                        placeholder="e.g., doors, hood, rear window, etc."
-                        className="bg-muted border-border focus:border-primary"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Budget Range
-                      </label>
-                      <Input 
-                        placeholder="$ - $$$"
-                        className="bg-muted border-border focus:border-primary"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Preferred Date
-                      </label>
-                      <Input 
-                        type="date"
-                        className="bg-muted border-border focus:border-primary"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Service Location *
-                    </label>
-                    <Input 
-                      placeholder="Address in Kissimmee (or Central Florida) where service will be performed"
-                      className="bg-muted border-border focus:border-primary"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Additional Details
-                    </label>
-                    <Textarea 
-                      placeholder="Tell us about your vehicle's condition, specific needs, or any questions..."
-                      rows={4}
-                      className="bg-muted border-border focus:border-primary"
-                    />
-                  </div>
-
-                  <Button 
-                    type="submit" 
-                    size="lg" 
-                    className="w-full btn-primary text-lg py-6"
-                  >
-                    <Car className="mr-2 h-5 w-5" />
-                    Get My Free Quote
-                  </Button>
-                </form>
-
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-6">
-            {/* Contact Methods */}
-            <div className="space-y-4 reveal-on-scroll opacity-0 translate-y-6 will-change-transform">
-              {contactMethods.map((method, index) => {
-                const IconComponent = method.icon;
-                return (
-                  <div 
-                    key={index} 
-                    className={`flex items-center space-x-3 p-4 rounded-lg bg-card text-foreground hover:bg-secondary transition-colors cursor-pointer ${method.action ? 'hover:bg-secondary' : ''}`}
-                    onClick={() => method.action && handleContactClick(method.action)}
-                  >
-                    <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <IconComponent className="h-5 w-5 text-primary" />
-                    </div>
-                    <span className="text-foreground font-medium">{method.text}</span>
-                  </div>
-                );
-              })}
+          {/* Left Column: Content & Illustration */}
+          <div className="space-y-8 pt-10 sticky top-24">
+            <div className="inline-block px-4 py-2 border border-gray-300 rounded-full bg-white/50 backdrop-blur-sm">
+              <span className="text-xs font-bold tracking-widest uppercase text-gray-600">Let's Work Together</span>
             </div>
 
-            {/* Business Hours */}
-            <Card className="card-automotive reveal-on-scroll opacity-0 translate-y-6 will-change-transform">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold text-foreground mb-4 flex items-center">
-                  <Clock className="h-5 w-5 text-primary mr-3" />
-                  Business Hours
-                </h3>
-                <div className="space-y-3">
-                  {businessHours.map((schedule, index) => (
-                    <div key={index} className="flex justify-between items-center">
-                      <span className="text-muted-foreground">{schedule.day}</span>
-                      <span className="text-foreground font-medium">{schedule.hours}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 pt-4 border-t border-border/50">
-                  <p className="text-sm text-muted-foreground">
-                    Emergency services available by appointment
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <h2 className="text-4xl sm:text-5xl lg:text-5xl font-normal font-onest text-white leading-[1.1]">
+              Ready to Transform Your <br />
+              Dream Space?
+            </h2>
 
-            {/* Quick Actions */}
-            <div className="space-y-3 reveal-on-scroll opacity-0 translate-y-6 will-change-transform">
-              <Button 
-                size="lg" 
-                className="btn-primary text-lg px-8 py-6 flex items-center justify-center w-full"
-                onClick={() => handleContactClick("tel:+1407xxxxxxx")}
-              >
-                <Phone className="mr-2 h-5 w-5" />
-                Call Now
-              </Button>
+            <p className="text-lg text-gray-400 font-sans max-w-md leading-relaxed font-normal">
+              Whether you have a clear vision or need guidance to bring your ideas to life,
+              Super Heros Painting is here to help. Let's collaborate to create something extraordinary.
+            </p>
+
+            {/* Decorative Illustration (Styled like footer) */}
+            <div className="relative mt-12 opacity-20 pointer-events-none select-none">
+              <Paintbrush className="w-64 h-64 stroke-[0.5] text-gray-400" />
             </div>
           </div>
+
+          {/* Right Column: Premium Form */}
+          {/* Right Column: Clean Form Layout */}
+          <div className="bg-white rounded-[4px] p-8 sm:p-10 shadow-lg relative">
+
+            <div className="mb-8">
+              <h3 className="text-3xl font-medium font-onest text-gray-900 tracking-tight">Get in touch with us today!</h3>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+
+              {/* Row 1: Name & Phone */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+                <div className="space-y-2">
+                  <label className="text-base font-normal text-gray-500">Full Name</label>
+                  <Input
+                    required
+                    placeholder="Enter your full name"
+                    className="bg-white border-[#e5e7eb] focus:border-black rounded-none h-14 px-4 text-base transition-colors placeholder:text-gray-400"
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-base font-normal text-gray-500">Phone Number</label>
+                  <Input
+                    required
+                    type="tel"
+                    placeholder="Enter your phone number"
+                    className="bg-white border-[#e5e7eb] focus:border-black rounded-none h-14 px-4 text-base transition-colors placeholder:text-gray-400"
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Row 2: Email & Address */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+                <div className="space-y-2">
+                  <label className="text-base font-normal text-gray-500">Email</label>
+                  <Input
+                    required
+                    type="email"
+                    placeholder="Enter your email address"
+                    className="bg-white border-[#e5e7eb] focus:border-black rounded-none h-14 px-4 text-base transition-colors placeholder:text-gray-400"
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-base font-normal text-gray-500">Project Address</label>
+                  <Input
+                    required
+                    placeholder="City, Zip Code"
+                    className="bg-white border-[#e5e7eb] focus:border-black rounded-none h-14 px-4 text-base transition-colors placeholder:text-gray-400"
+                    onChange={(e) => handleInputChange('address', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Row 3: Project Type & Timeline */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+                <div className="space-y-2">
+                  <label className="text-base font-normal text-gray-500">Type of Project</label>
+                  <select
+                    required
+                    className="w-full h-14 px-4 bg-white border border-[#e5e7eb] focus:border-black rounded-none text-base outline-none text-gray-900 transition-colors appearance-none"
+                    onChange={(e) => handleInputChange('projectType', e.target.value)}
+                  >
+                    <option value="" className="text-gray-400">Select project type...</option>
+                    <option value="Interior">Interior Painting</option>
+                    <option value="Exterior">Exterior Painting</option>
+                    <option value="Cabinet">Cabinet Painting</option>
+                    <option value="Commercial">Commercial Project</option>
+                    <option value="FullHome">Full Home Transformation</option>
+                    <option value="NotSure">Not Sure Yet</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-base font-normal text-gray-500">Timeline</label>
+                  <select
+                    required
+                    className="w-full h-14 px-4 bg-white border border-[#e5e7eb] focus:border-black rounded-none text-base outline-none text-gray-900 transition-colors appearance-none"
+                    onChange={(e) => handleInputChange('timeline', e.target.value)}
+                  >
+                    <option value="" className="text-gray-400">When to start?</option>
+                    <option value="2weeks">Within 2 weeks</option>
+                    <option value="1-2months">1-2 months</option>
+                    <option value="2-4months">2-4 months</option>
+                    <option value="exploring">Just exploring options</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Row 4: Source (Full Width) */}
+              <div className="space-y-2">
+                <label className="text-base font-normal text-gray-500">How did you hear about us?</label>
+                <select
+                  className="w-full h-14 px-4 bg-white border border-[#e5e7eb] focus:border-black rounded-none text-base outline-none text-gray-900 transition-colors appearance-none"
+                  onChange={(e) => handleInputChange('source', e.target.value)}
+                >
+                  <option value="" className="text-gray-400">Select source...</option>
+                  <option value="Google">Google Search</option>
+                  <option value="Referral">Referral</option>
+                  <option value="Social">Social Media</option>
+                  <option value="SawWork">Saw Your Work</option>
+                  <option value="Repeat">Repeat Customer</option>
+                </select>
+              </div>
+
+              {/* Message */}
+              <div className="space-y-2">
+                <label className="text-base font-normal text-gray-500">Message (Optional)</label>
+                <Textarea
+                  placeholder="Type a message here..."
+                  className="bg-white border-[#e5e7eb] focus:border-black rounded-none min-h-[150px] p-4 text-base resize-none transition-colors placeholder:text-gray-400"
+                  onChange={(e) => handleInputChange('vision', e.target.value)}
+                />
+              </div>
+
+              {/* Button aligned right */}
+              <div className="flex justify-end pt-4">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="h-16 px-10 bg-[#161616] hover:bg-black text-white text-base font-bold uppercase tracking-widest rounded-none shadow-none transition-all duration-300 flex items-center gap-3 group relative overflow-hidden"
+                >
+                  <span className="relative z-10 border-b border-white pb-0.5 leading-none">
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </span>
+                  {!isSubmitting && <ArrowUpRight size={20} className="relative z-10" />}
+                </Button>
+              </div>
+
+            </form>
+          </div>
+
         </div>
       </div>
-    </section>
+    </section >
   );
 };
 

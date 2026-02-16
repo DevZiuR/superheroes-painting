@@ -1,99 +1,23 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { ZoomIn, Play } from "lucide-react";
-
-// Import gallery images
-// (Legacy local gallery imports removed after refocus to wraps/decals/chrome/tints)
+import { ArrowUpRight } from "lucide-react";
 
 const Gallery = () => {
-  const [activeFilter, setActiveFilter] = useState("all");
-
-  type GalleryItem = {
-    src: string;
-    alt: string;
-    title: string;
-    category: string;
-    featured?: boolean;
-    type?: 'image' | 'video';
-  };
-
-  const galleryItems: GalleryItem[] = [
-    // Wraps
+  const projects = [
     {
-      src: 'https://i.imgur.com/Kuyty69.jpeg',
-      alt: 'Mitsubishi Evo full wrap',
-      category: 'wraps',
-      title: 'Evo Wrap'
+      src: "https://i.imgur.com/5r77PGg.png",
+      title: "Interior Elegance",
+      description: "Transforming living spaces with precision and care.",
     },
     {
-      src: 'https://i.imgur.com/q1X9rd4.jpeg',
-      alt: 'Mitsubishi Evo wrap (angle 2)',
-      category: 'wraps',
-      title: 'Evo Wrap (2)'
+      src: "https://s3-media0.fl.yelpcdn.com/bphoto/2QWZbngNcc8iINksNznLaw/o.jpg",
+      title: "Exterior Excellence",
+      description: "Boosting curb appeal with durable, high-quality finishes.",
     },
     {
-      src: 'https://i.imgur.com/0weBdbx.mp4',
-      alt: 'Subaru Sambar – Satin Black Wrap & Decals (video)',
-      category: 'wraps',
-      title: 'Subaru Sambar • Satin Black (Video)',
-      type: 'video'
-    },
-
-    // Decals
-    {
-      src: 'https://i.imgur.com/CMwKPlF.jpeg',
-      alt: 'Hello Kitty custom decals',
-      category: 'decals',
-      title: 'Hello Kitty Decals'
-    },
-    {
-      src: 'https://i.imgur.com/ZLQqX4e.jpeg',
-      alt: 'Cyber Beast featured background look',
-      category: 'decals',
-      featured: true,
-      title: 'Cyber Beast • Feature'
-    },
-
-    // Chrome Deletes
-    {
-      src: 'https://i.imgur.com/5JfcoKC.jpeg',
-      alt: 'Chrome delete on a clean Honda Civic',
-      category: 'chrome',
-      title: 'Chrome Delete • Civic'
-    },
-    {
-      src: 'https://i.imgur.com/geTXlMN.jpeg',
-      alt: 'Chrome delete on Jeep',
-      category: 'chrome',
-      title: 'Chrome Delete • Jeep'
-    },
-    {
-      src: 'https://i.imgur.com/psKRkUp.jpeg',
-      alt: 'Chrome delete on Jeep (angle 2)',
-      category: 'chrome',
-      title: 'Chrome Delete • Jeep (2)'
-    },
-    {
-      src: 'https://i.imgur.com/DMxNjva.jpeg',
-      alt: 'Chrome delete on Mercedes-Benz',
-      category: 'chrome',
-      title: 'Chrome Delete • Benz'
+      src: "https://s3-media0.fl.yelpcdn.com/bphoto/92jXiXU_iv6x6yHlXbbhFA/o.jpg",
+      title: "Detail & Color",
+      description: "Expert color consultation and flawless application.",
     }
   ];
-
-  const filterCategories = [
-    { id: "all", label: "All Work" },
-    { id: "wraps", label: "Wraps" },
-    { id: "decals", label: "Decals" },
-    { id: "chrome", label: "Chrome Deletes" },
-    { id: "tints", label: "Tints" }
-  ];
-
-  const filteredItems = activeFilter === "all" 
-    ? galleryItems 
-    : galleryItems.filter(item => item.category === activeFilter);
 
   const scrollToContact = () => {
     const element = document.querySelector("#contact");
@@ -102,114 +26,59 @@ const Gallery = () => {
     }
   };
 
-  // Reveal-on-scroll animation for gallery cards
-  useEffect(() => {
-    const container = document.querySelector('#gallery');
-    if (!container) return;
-
-    const elements = container.querySelectorAll('.reveal-on-scroll');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement;
-            el.classList.add('animate-fade-in', 'opacity-100', 'translate-y-0');
-            el.classList.remove('opacity-0', 'translate-y-6');
-            observer.unobserve(el);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, [activeFilter]);
-
   return (
-    <section id="gallery" className="py-20 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold font-playfair text-foreground mb-4">
-            Our <span className="text-primary">Work Speaks</span> for Itself
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8 font-inter">
-            See the incredible transformations we've achieved for Miami's most discerning vehicle owners. 
-            From everyday cars to exotic supercars, every detail matters.
-          </p>
-          
+    <section id="gallery" className="py-20 md:py-32 bg-[#111111] text-white overflow-hidden">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8">
+
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 sm:mb-16 gap-8">
+          <div className="flex flex-col space-y-6">
+            <span className="w-fit inline-block px-3 py-1 border border-gray-700 text-[10px] md:text-xs font-bold tracking-widest uppercase">
+              SELECTED PROJECTS
+            </span>
+            <div className="space-y-2">
+              <h2 className="text-4xl md:text-5xl lg:text-5xl font-normal text-white leading-tight tracking-tight">
+                Our Work Speaks for Itself
+              </h2>
+              <p className="text-gray-400 text-lg md:text-xl font-medium tracking-wide uppercase">
+                BEFORE & AFTER TRANSFORMATIONS
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center h-full">
+            <div className="hidden md:block h-20 w-[1px] bg-gray-800 mr-8"></div>
+            <button
+              onClick={scrollToContact}
+              className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white hover:text-gray-300 transition-colors "
+            >
+              SEE ALL PROJECTS <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </button>
+          </div>
         </div>
 
-
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {filteredItems.map((item, index) => (
-            <Dialog key={index}>
-              <DialogTrigger asChild>
-                <Card className={`card-automotive hover-lift cursor-pointer overflow-hidden group reveal-on-scroll opacity-0 translate-y-6 will-change-transform ${
-                  item.featured ? 'md:col-span-1 lg:col-span-1' : ''
-                }`}>
-                  <CardContent className="p-0 relative">
-                    <div className="aspect-square overflow-hidden">
-                      {item.type === 'video' ? (
-                        <video
-                          src={item.src}
-                          className="w-full h-full object-cover"
-                          muted
-                          loop
-                          autoPlay
-                          playsInline
-                        />
-                      ) : (
-                        <img
-                          src={item.src}
-                          alt={item.alt}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                      )}
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <h4 className="text-foreground font-semibold mb-2">{item.title}</h4>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-muted-foreground capitalize">
-                            {item.category}
-                          </span>
-                          {item.type === 'video' ? (
-                            <Play className="h-5 w-5 text-primary" />
-                          ) : (
-                            <ZoomIn className="h-5 w-5 text-primary" />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </DialogTrigger>
-              <DialogContent className="max-w-4xl">
-                <div className="space-y-4">
-                  {item.type === 'video' ? (
-                    <video
-                      src={item.src}
-                      controls
-                      className="w-full h-auto rounded-lg"
-                    />
-                  ) : (
-                    <img
-                      src={item.src}
-                      alt={item.alt}
-                      className="w-full h-auto rounded-lg"
-                    />
-                  )}
-                  <div>
-                    <h3 className="text-xl font-bold text-foreground mb-2">{item.title}</h3>
-                    <p className="text-muted-foreground">{item.alt}</p>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          {projects.map((project, index) => (
+            <div key={index} className="group relative flex flex-col space-y-4">
+              <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
+                <img
+                  src={project.src}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                {/* Subtle Overlay */}
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-xl font-bold text-white uppercase tracking-tight">
+                  {project.title}
+                </h3>
+                <p className="text-gray-500 text-sm font-medium">
+                  {project.description}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
 
